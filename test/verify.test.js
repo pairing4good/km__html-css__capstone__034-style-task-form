@@ -37,63 +37,30 @@ afterEach(async () => {
   await browser.close();
 });
 
-describe('the task-form', () => {
-  it('should have a text input', async () => {
-    const inputs = await page.$$('#task-form > button[type="submit"]');
-    expect(inputs.length).toBe(1);
+describe('the description text input', () => {
+  it('should take up the left 90% of the row', async () => {
+      const displayFlex = await page.$eval('style', (style) => {
+        return style.innerHTML.match(/\.task-form-row.*{[\s\S][^}]*display.*:.*flex.*;/g).length;
+      });
+      expect(displayFlex).toEqual(1);
+
+      const leftNinty = await page.$eval('style', (style) => {
+        return style.innerHTML.match(/\.task-form-left.*{[\s\S][^}]*flex.*:.*90%.*;/g).length;
+      });
+      expect(leftNinty).toEqual(1);
   });
 });
 
-describe('the text input', () => {      
-  it('should have a placeholder that says "task description"', async () => {
-    const placeholder = await page.$eval('#task-form > input[type="text"]', (textInput) => {
-      return textInput.getAttribute('placeholder');
-    });
-    
-    expect(placeholder).toBe("task description");
-  });
-  
-  it('should be required', async () => {
-    const isRequired = await page.$eval('#task-form > input[type="text"]', (textInput) => {
-      return textInput.hasAttribute('required');
-    });
-    
-    expect(isRequired).toBe(true);
-  });
-});
+describe('the status dropdown', () => {
+  it('should take up the right 10% of the row', async () => {
+      const displayFlex = await page.$eval('style', (style) => {
+        return style.innerHTML.match(/\.task-form-row.*{[\s\S][^}]*display.*:.*flex.*;/g).length;
+      });
+      expect(displayFlex).toEqual(1);
 
-describe('the task-form', () => {
-  it('should have a todo drowpdown option', async () => {
-      const inputs = await page.$$('#task-form > select > option[value="todo"]');
-      expect(inputs.length).toBe(1);
-  });
-});
-
-describe('the task-form', () => {
-  it('should have a doing drowpdown option', async () => {
-    const inputs = await page.$$('#task-form > select > option[value="doing"]');
-      expect(inputs.length).toBe(1);
-  });
-});
-
-describe('the task-form', () => {
-  it('should have a done drowpdown option', async () => {
-    const inputs = await page.$$('#task-form > select > option[value="done"]');
-      expect(inputs.length).toBe(1);
-  });
-});
-
-describe('the task-form', () => {
-  it('should have an Add button', async () => {
-    const innerTexts = await page.$$eval('#task-form > button[type="submit"]', (inputs) => {
-      let innerTexts = [];
-      for(let i = 0; i < inputs.length; i++){
-        innerTexts.push(inputs[0].innerText)
-      }
-      return innerTexts;
-    });
-    expect(innerTexts.length).toBe(1);
-      
-    expect(innerTexts[0]).toBe("Add");
+      var rightTen = await page.$eval('style', (style) => {
+        return style.innerHTML.match(/\.task-form-right.*{[\s\S][^}]*flex.*:.*10%.*;/g).length;
+      });
+      expect(rightTen).toEqual(1);
   });
 });
